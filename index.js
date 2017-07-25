@@ -1,16 +1,8 @@
-/* PRODUCTION REMINDER */
-/* get EUR account ID instead of USD */
-/* get EUR funds instead of USD */
-
 var schedule = require('node-schedule');
 var authedClient = require('./modules/client').authedClient;
 
 var btcAccountId, eurAccountId;
 
-
-// var j = schedule.scheduleJob('*/5 * * * * *', function(){
-//   tradeTask();
-// });
 
 authedClient.getAccounts(function(err, response, data) {
   if (err) {
@@ -27,9 +19,15 @@ authedClient.getAccounts(function(err, response, data) {
   	}
   }
   console.log("Accounts IDs: ", btcAccountId, eurAccountId);
-  // Run trade task
-  tradeTask(authedClient, btcAccountId, eurAccountId);
+  // Run trade task repeatedly
+  var jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
+    tradeTask(authedClient, btcAccountId, eurAccountId);
+  });
 });
+
+
+
+/******** Trade Task Definition **********/
 
 function tradeTask(client, btcAccountId, eurAccountId) {
 	//Get available funds from accounts
@@ -39,13 +37,13 @@ function tradeTask(client, btcAccountId, eurAccountId) {
 	    console.log(err);
 	    return;
 	  }
-	  btcFunds = data.available;
+	  btcFunds = parseFloat(data.available);
 	  client.getAccount(eurAccountId, function(err, response, data) {
 	    if (err) {
 	      console.log(err);
 	      return;
 	    }
-	    eurFunds = data.available;
+	    eurFunds = parseFloat(data.available);
 	    console.log("Available Funds");
 	    console.log("BTC: ", btcFunds);
 	    console.log("EUR: ", eurFunds);
@@ -73,24 +71,39 @@ function tradeTask(client, btcAccountId, eurAccountId) {
             	    console.log("Latest fill: ", latestFill);
             	    // START PLACING orders
             	    if(latestFill.side == 'buy') {
-            	    	console.log("Place SELL order")
+            	    	var limitPrice = (parseFloat(latestFill.price) + 1).toFixed(2);
+                    var size = btcFunds.toFixed(8);
+                    var args = {
+                      price: limitPrice.toString(), // EUR
+                      size: size.toString(),  // BTC
+                      product_id: 'BTC-EUR'
+                    };
+
+                    console.log("SELL order -> ", args);
+                    authedClient.sell(args, function(err, response, data) {
+                      if (err) {
+                        console.log(err);
+                        return;
+                      }
+                      console.log("SELL order placed: ", data);
+                    });
             	    }
             	    if(latestFill.side == 'sell') {
             	    	var limitPrice = (parseFloat(latestFill.price) - 1).toFixed(2);
-            	    	var size = ((eurFunds - 0.5) / limitPrice).toFixed(5);
+            	    	var size = ((eurFunds - 0.5) / limitPrice).toFixed(8);
             	    	var args = {
             	    	  price: limitPrice.toString(), // EUR
             	    	  size: size.toString(),  // BTC
             	    	  product_id: 'BTC-EUR'
             	    	};
-            	    	console.log("order: ", args);
-            	    	// authedClient.buy(args, function(err, response, data) {
-            	    	//   if (err) {
-            	    	//     console.log(err);
-            	    	//     return;
-            	    	//   }
-            	    	//   console.log("BUY order placed: ", data);
-            	    	// });
+
+            	    	authedClient.buy(args, function(err, response, data) {
+            	    	  if (err) {
+            	    	    console.log(err);
+            	    	    return;
+            	    	  }
+            	    	  console.log("BUY order placed: ", data);
+            	    	});
             	    }
             	});
             }
@@ -103,17 +116,3 @@ function tradeTask(client, btcAccountId, eurAccountId) {
 	  });
 	});
 }
-
-
-
-// Schedule task every 10 seconds
-// Get Last order
-// if order.status == done
-// 		if order.type == buy
-//			get buy.price
-//			get BTC funds
-//			placeNewOrder(type: sell, amount: BTC funds,limit: buy.price + 1)
-// 		if order.type == sell
-//			get sell.price
-//			get EUR funds
-//			placeNewOrder(type: buy, amount: EUR funds,limit: sell.price - 1)
