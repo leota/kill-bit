@@ -1,0 +1,11 @@
+{
+  "name": "gdax-trader",
+  "version": "0.0.1",
+  "description": "Tradiing bot for GDAX exchange market",
+  "dependencies": {
+    "async": "^2.5.0",
+    "gdax": "^0.4.2",
+    "node-schedule": "^1.2.3"
+  },
+  "license": "MIT"
+}
