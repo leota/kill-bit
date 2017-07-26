@@ -40,7 +40,7 @@ git push heroku master
 
 Ensure that at least one instance of the app is running:
 ```
-heroku ps:scale web=1
+heroku ps:scale worker=1
 ```
 ## Commit changes
 ```
@@ -57,8 +57,10 @@ heroku logs --tail
 # check number of current running dynos
 heroku ps
 
-# scale to 4 dynos
+# scale to 4 web dynos
 heroku ps:scale web=4
+# scale to 4 worker dynos
+heroku ps:scale worker=4
 ```
 ## Run the app locally
 ```
