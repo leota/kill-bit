@@ -1,7 +1,11 @@
 {
   "name": "gdax-trader",
   "version": "0.0.1",
+  "author": "Leonardo Maglio @leota",
   "description": "Tradiing bot for GDAX exchange market",
+  "engines": {
+    "node": "7.2.0"
+  },
   "dependencies": {
     "async": "^2.5.0",
     "gdax": "^0.4.2",

@@ -52,7 +52,7 @@ git push heroku master
 ```
 heroku logs --tail
 ```
-# Scale the App
+## Scale the App
 ```
 # check number of current running dynos
 heroku ps
@@ -60,5 +60,10 @@ heroku ps
 # scale to 4 dynos
 heroku ps:scale web=4
 ```
+## Run the app locally
+```
+heroku local web
+```
+
 
 Enjoy Trading!!
