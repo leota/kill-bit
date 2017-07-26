@@ -34,6 +34,8 @@ In the app root folder
 ```
 # create new heroku app if you don'thave one
 heroku create my-app
+# set 1 worker to run the job
+heroku ps:scale worker=1
 # deploy 
 git push heroku master
 ```
@@ -57,8 +59,10 @@ heroku logs --tail
 # check number of current running dynos
 heroku ps
 
-# scale to 4 dynos
+# scale to 4 web dynos
 heroku ps:scale web=4
+# scale to 4 worker dynos
+heroku ps:scale worker=4
 ```
 ## Run the app locally
 ```
