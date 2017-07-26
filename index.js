@@ -22,8 +22,8 @@ authedClient.getAccounts(function(err, response, data) {
   	}
   }
   console.log("Accounts IDs: ", btcAccountId, eurAccountId);
-  // Run trade task repeatedly
-  var jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
+  // Run trade task every 5 seconds
+  var jobScheduler = schedule.scheduleJob('*/5 * * * * *', function(){
     tradeTask(authedClient, btcAccountId, eurAccountId);
   });
 });
