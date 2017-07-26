@@ -34,6 +34,8 @@ In the app root folder
 ```
 # create new heroku app if you don'thave one
 heroku create my-app
+# set 1 worker to run the job
+heroku ps:scale worker=1
 # deploy 
 git push heroku master
 ```
