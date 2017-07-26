@@ -4,7 +4,7 @@ var authedClient = require('./modules/client').authedClient;
 var btcAccountId, eurAccountId;
 var btcToKeep = 0.00005;
 var eurToKeep = 1;
-var INTERVAL = 1;
+var INTERVAL = 0.20; // EUR
 
 
 authedClient.getAccounts(function(err, response, data) {
