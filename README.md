@@ -12,11 +12,6 @@ npm install
 Rename /modules/_config.js to "config.js" <br>
 Add your API keys
 
-## Run
-```
-node index.js
-```
-
 *IMPORTANT NOTE: By default it uses real API key. To use Sandbox modify client.js decommenting:
 ```
 // var sandboxApiURL = 'https://api-public.sandbox.gdax.com';
@@ -27,6 +22,43 @@ and commenting:
 ```
 var apiURL = 'https://api.gdax.com';
 var authedClient = new Gdax.AuthenticatedClient(key, b64secret, passphrase, apiURL);
+```
+## Run
+```
+node index.js
+```
+
+# Heroku
+## Deploy
+In the app root folder
+```
+# create new heroku app if you don'thave one
+heroku create my-app
+# deploy 
+git push heroku master
+```
+
+Ensure that at least one instance of the app is running:
+```
+heroku ps:scale web=1
+```
+## Commit changes
+```
+git add .
+git commit -m "message"
+git push heroku master
+```
+## View logs
+```
+heroku logs --tail
+```
+# Scale the App
+```
+# check number of current running dynos
+heroku ps
+
+# scale to 4 dynos
+heroku ps:scale web=4
 ```
 
 Enjoy Trading!!
