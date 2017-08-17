@@ -1,47 +1,49 @@
-var schedule = require('node-schedule');
-var authedClient = require('./modules/client').authedClient;
+let schedule = require('node-schedule')
+c = require('./modules/client')
 
-var btcAccountId, eurAccountId;
-var btcToKeep = 0.00005;
-var eurToKeep = 1;
-var INTERVAL = 0.20; // EUR
+let assetAccoundID, currencyAccountID
+btcToKeep = 0.00005
+eurToKeep = 1
+INTERVAL = 0.20 // EUR
 
-
-authedClient.getAccounts(function(err, response, data) {
+c.authedClient.getAccounts(function(err, response, data) {
   if (err) {
     console.log(err);
     return;
   }
-  // Get BTC and EUR accounts ids
-  for( var i = 0; i < data.length; i++) {
-  	if(data[i].currency == 'BTC') {
-  		btcAccountId = data[i].id;
+  // Get Asset and Currency accounts IDs
+  let asset = c.selector.split('-')[0]
+  currency = c.selector.split('-')[1]
+  for( let i = 0; i < data.length; i++) {
+  	if(data[i].currency == asset) {
+  		assetAccoundID = data[i].id;
   	}
-  	if(data[i].currency == 'EUR') {
-  		eurAccountId = data[i].id;
+  	if(data[i].currency == currency) {
+  		currencyAccountID = data[i].id;
   	}
   }
-  console.log("Accounts IDs: ", btcAccountId, eurAccountId);
+  console.log("Accounts IDs: ", assetAccoundID, currencyAccountID);
+  console.log(c.selector)
   // Run trade task every 10 seconds
-  var jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
-    tradeTask(authedClient, btcAccountId, eurAccountId);
-  });
+  // var jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
+  //   tradeTask(authedClient, assetAccoundID, currencyAccountID);
+  // });
 });
 
 
 
 /******** Trade Task Definition **********/
 
-function tradeTask(client, btcAccountId, eurAccountId) {
+function tradeTask(client, assetAccoundID, currencyAccountID) {
 	//Get available funds from accounts
 	var btcFunds, eurFunds;
-	client.getAccount(btcAccountId, function(err, response, data) {
+	client.getAccount(assetAccoundID, function(err, response, data) {
 	  if (err) {
 	    console.log(err);
 	    return;
 	  }
 	  btcFunds = parseFloat(data.available);
-	  client.getAccount(eurAccountId, function(err, response, data) {
+	  client.getAccount(currencyAccountID, function(err, response, data) {
 	    if (err) {
 	      console.log(err);
 	      return;
