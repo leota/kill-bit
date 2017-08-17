@@ -1,5 +1,5 @@
 let schedule = require('node-schedule')
-c = require('./modules/client')
+c = require('./lib/client')
 
 let assetAccoundID, currencyAccountID
 btcToKeep = 0.00005
@@ -22,8 +22,6 @@ c.authedClient.getAccounts(function(err, response, data) {
   		currencyAccountID = data[i].id;
   	}
   }
-  console.log("Accounts IDs: ", assetAccoundID, currencyAccountID);
-  console.log(c.selector)
   // Run trade task every 10 seconds
   // var jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
   //   tradeTask(authedClient, assetAccoundID, currencyAccountID);
