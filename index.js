@@ -22,8 +22,8 @@ authedClient.getAccounts(function(err, response, data) {
   	}
   }
   console.log("Accounts IDs: ", btcAccountId, eurAccountId);
-  // Run trade task every 5 seconds
-  var jobScheduler = schedule.scheduleJob('*/5 * * * * *', function(){
+  // Run trade task every 10 seconds
+  var jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
     tradeTask(authedClient, btcAccountId, eurAccountId);
   });
 });
@@ -48,8 +48,8 @@ function tradeTask(client, btcAccountId, eurAccountId) {
 	    }
 	    eurFunds = parseFloat(data.available);
 	    console.log("$$$ Available Funds $$$");
-	    console.log("BTC: ", btcFunds);
-	    console.log("EUR: ", eurFunds);
+	    console.log("BTC: ", btcFunds.toFixed(5));
+	    console.log("EUR: ", eurFunds.toFixed(5));
       console.log("$$$$$$$$$$$$$$$$$$$$$$$");
     	//Get list of open orders
     	client.getOrders(function(err, response, data) {
