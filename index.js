@@ -1,5 +1,6 @@
 let schedule = require('node-schedule')
-c = require('./lib/client')
+    colors = require('colors')
+    c = require('./lib/client')
 
 let assetAccoundID, currencyAccountID
 btcToKeep = 0.00005
