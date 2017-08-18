@@ -3,15 +3,18 @@ let schedule = require('node-schedule')
     moment = require('moment')
     c = require('./lib/client')
     a = require('./lib/actions')
+    t = require('./lib/trade')
 
 /* GLOBAL VARIABLES */
-let assetAccountID, currencyAccountID, startAssetCapital, startCurrencyCapital, lastTradeTime, lastTradePrice,
-asset = c.selector.split('-')[0]
-currency = c.selector.split('-')[1]
-btcToKeep = 0.00005
-eurToKeep = 1
-INTERVAL = 0.20 // EUR
+let assetAccountID, currencyAccountID, startAssetCapital, startCurrencyCapital, 
+    lastTradeTime, lastTradePrice, lastFill,
+    asset = c.selector.split('-')[0]
+    currency = c.selector.split('-')[1]
+    btcToKeep = 0.00005
+    eurToKeep = 1
+    INTERVAL = 0.20 // EUR
 
+/* EXECUTE ONLY ONCE: Get Account balances */
 a.getAccountsIDs(c.authedClient, c.selector).then( res => {
   assetAccountID = res[0]
   currencyAccountID = res[1]
@@ -39,26 +42,13 @@ a.getAccountsIDs(c.authedClient, c.selector).then( res => {
   })
 }).catch(err => {
   console.log("ERROR[getCurrencyCapitalWrap]:".red, err)
+}).then(() => {
+   let jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
+      t.trade(c.authedClient, c.publicClient, assetAccountID, currencyAccountID);
+  });
 })
 
-  // Run trade task every 10 seconds
-  // let jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
-  //   trade(c.authedClient, c.publicClient, assetAccountID, currencyAccountID);
-  // });
 
-function trade(authedClient, publicClient, assetAccountID, currencyAccountID) {
-  a.getLastTrade(publicClient).then(res => {
-    lastTradeTime = moment(res.time).format('DD-MM-YYYY HH:mm:ss')
-    lastTradePrice = parseFloat(res.price)
-    console.log(lastTradeTime.grey, lastTradePrice.toFixed(2).cyan)
-  }).catch(err => {
-    console.log("ERROR[getLastTradePrice]:".red, err)
-  })
-}
-
-  // a.getCurrencyCapital(c.authedClient).then(res => {
-  //   console.log("curr cap",res)
-  // })
 
 /******** Trade Task Definition **********/
 
