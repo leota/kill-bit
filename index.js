@@ -1,8 +1,10 @@
 let schedule = require('node-schedule')
     colors = require('colors')
     c = require('./lib/client')
+    a = require('./lib/actions')
 
-let assetAccoundID, currencyAccountID
+/* GLOBAL VARIABLES */
+let assetAccoundID, currencyAccountID, lastTradeTime, lastTradePrice,
 btcToKeep = 0.00005
 eurToKeep = 1
 INTERVAL = 0.20 // EUR
@@ -24,11 +26,20 @@ c.authedClient.getAccounts(function(err, response, data) {
   	}
   }
   // Run trade task every 10 seconds
-  // var jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
-  //   tradeTask(authedClient, assetAccoundID, currencyAccountID);
-  // });
+  let jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
+    trade(c.authedClient, c.publicClient, assetAccoundID, currencyAccountID);
+  });
 });
 
+function trade(authedClient, publicClient, assetAccoundID, currencyAccountID) {
+  a.getLastTrade(publicClient).then(res => {
+    lastTradeTime = res.time
+    lastTradePrice = res.price
+    console.log(lastTradeTime.grey, lastTradePrice.cyan)
+  }).catch(err => {
+    console.log("ERROR[getLastTradePrice]:".red, err)
+  })
+}
 
 
 /******** Trade Task Definition **********/
