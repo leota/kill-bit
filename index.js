@@ -7,9 +7,10 @@ let schedule = require('node-schedule')
 
 /* GLOBAL VARIABLES */
 let assetAccountID, currencyAccountID, startAssetCapital, startCurrencyCapital, 
-    lastTradeTime, lastTradePrice, lastFill,
+    lastTradeTime, lastTradePrice, lastFill, lastFillPrice,
     asset = c.selector.split('-')[0]
     currency = c.selector.split('-')[1]
+    PANIC = 50;
     btcToKeep = 0.00005
     eurToKeep = 1
     INTERVAL = 0.20 // EUR
