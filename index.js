@@ -41,6 +41,7 @@ a.getAccountsIDs(c.authedClient, c.selector).then( res => {
 }).catch(err => {
   console.log("ERROR[getCurrencyCapitalWrap]:".red, err)
 }).then(() => {
+    /* EXECUTE every 10 seconds */
    let jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
       t.trade(c.authedClient, c.publicClient, assetAccountID, currencyAccountID, c.selector);
       console.log("STARTING BALANCE:".green, startAssetCapital.yellow, asset.yellow, '---', startCurrencyCapital.yellow, currency.yellow)
