@@ -34,7 +34,6 @@ a.getAccountsIDs(c.authedClient, c.selector).then( res => {
 .then( () => {
   a.getCurrencyCapital(c.authedClient, currencyAccountID).then( res => {
     startCurrencyCapital = parseFloat(res.balance).toFixed(2)
-    console.log("STARTING BALANCE:".green, startAssetCapital.yellow, asset.yellow, '---', startCurrencyCapital.yellow, currency.yellow)
     return true
   }).catch(err => {
     console.log("ERROR[getCurrencyCapital]:".red, err)
@@ -44,5 +43,6 @@ a.getAccountsIDs(c.authedClient, c.selector).then( res => {
 }).then(() => {
    let jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
       t.trade(c.authedClient, c.publicClient, assetAccountID, currencyAccountID, c.selector);
+      console.log("STARTING BALANCE:".green, startAssetCapital.yellow, asset.yellow, '---', startCurrencyCapital.yellow, currency.yellow)
   });
 })
