@@ -9,9 +9,9 @@ let schedule = require('node-schedule')
 let assetAccountID, currencyAccountID, startAssetCapital, startCurrencyCapital, lastTradePrice, startTotal,
     asset = c.selector.split('-')[0]
     currency = c.selector.split('-')[1]
-    PANIC = 12
-    MARGIN = 4
-    DROP = 1
+    PANIC = 80
+    MARGIN = 10
+    DROP = 2
 
 /* EXECUTE ONLY ONCE: Get Account balances */
 a.getAccountsIDs(c.authedClient, c.selector).then( res => {
