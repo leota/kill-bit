@@ -14,14 +14,14 @@ Add your API keys to config.js
 
 *IMPORTANT NOTE: By default it uses real API key. To use Sandbox modify client.js decommenting:
 ```
-// var sandboxApiURL = 'https://api-public.sandbox.gdax.com';
-// var authedClient = new Gdax.AuthenticatedClient(sandboxKey, sandboxB64secret, sandboxPassphrase, sandboxApiURL);
+// sandboxApiURL = 'https://api-public.sandbox.gdax.com';
+// authedClient = new Gdax.AuthenticatedClient(sandboxKey, sandboxB64secret, sandboxPassphrase, sandboxApiURL);
 ```
 
 and commenting:
 ```
-var apiURL = 'https://api.gdax.com';
-var authedClient = new Gdax.AuthenticatedClient(key, b64secret, passphrase, apiURL);
+apiURL = 'https://api.gdax.com';
+authedClient = new Gdax.AuthenticatedClient(key, b64secret, passphrase, apiURL);
 ```
 ## Run
 ```
