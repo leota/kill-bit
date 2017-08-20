@@ -6,7 +6,7 @@ let schedule = require('node-schedule')
     t = require('./lib/trade')
 
 /* GLOBAL VARIABLES */
-let assetAccountID, currencyAccountID, startAssetCapital, startCurrencyCapital,
+let assetAccountID, currencyAccountID, startAssetCapital, startCurrencyCapital, lastTradePrice, startTotal,
     asset = c.selector.split('-')[0]
     currency = c.selector.split('-')[1]
     PANIC = 60
@@ -40,10 +40,22 @@ a.getAccountsIDs(c.authedClient, c.selector).then( res => {
   })
 }).catch(err => {
   console.log("ERROR[getCurrencyCapitalWrap]:".red, err)
-}).then(() => {
+})
+.then( () => {
+  /* Get last trade price*/
+  a.getLastTrade(c.publicClient).then(res => {
+    lastTradePrice = parseFloat(res.price)
+    startTotal = parseFloat((parseFloat(startAssetCapital) * lastTradePrice) + parseFloat(startCurrencyCapital)).toFixed(2)
+  }).catch(err => {
+    console.log("ERROR[getLastTradePrice]:".red, err)
+  })
+}).catch(err => {
+  console.log("ERROR[getLastTradePriceWrap]:".red, err)
+})
+.then(() => {
     /* EXECUTE every 10 seconds */
    let jobScheduler = schedule.scheduleJob('*/10 * * * * *', function(){
-      t.trade(c.authedClient, c.publicClient, assetAccountID, currencyAccountID, c.selector);
-      console.log("STARTING BALANCE:".green, startAssetCapital.yellow, asset.yellow, '---', startCurrencyCapital.yellow, currency.yellow)
+      console.log("STARTING BALANCE:".green, startAssetCapital.gray, asset.gray, '---', startCurrencyCapital.gray, currency.gray, '--->', startTotal.yellow, currency.yellow)
+      t.trade(c.authedClient, c.publicClient, assetAccountID, currencyAccountID, c.selector, startTotal);
   });
 })
