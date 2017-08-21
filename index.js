@@ -12,8 +12,8 @@ let assetAccountID, currencyAccountID, startAssetCapital, startCurrencyCapital, 
     PANIC = 10
     MARGIN = 2
     DROP = 0.5
-    BUY_AMOUNT = 30
-    SELL_AMOUNT = 0.01
+    BUY_AMOUNT = 70
+    SELL_AMOUNT = 0.02
 
 /* EXECUTE ONLY ONCE: Get Account balances */
 a.getAccountsIDs(c.authedClient, c.selector).then( res => {
