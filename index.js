@@ -10,8 +10,8 @@ let assetAccountID, currencyAccountID, startAssetCapital, startCurrencyCapital, 
     asset = c.selector.split('-')[0]
     currency = c.selector.split('-')[1]
     PANIC = 80
-    MARGIN = 10
-    DROP = 2
+    MARGIN = 2
+    DROP = 1
 
 /* EXECUTE ONLY ONCE: Get Account balances */
 a.getAccountsIDs(c.authedClient, c.selector).then( res => {
