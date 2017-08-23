@@ -30,8 +30,8 @@ a.getAccountsIDs(c.authedClient, c.selector).then( res => {
       a.getLastTrade(c.publicClient).then(res => {
         lastTradePrice = parseFloat(res.price)
         startTotal = parseFloat((parseFloat(startAssetCapital) * lastTradePrice) + parseFloat(startCurrencyCapital)).toFixed(2)
-        /* EXECUTE every 30 seconds */
-        let jobScheduler = schedule.scheduleJob('*/30 * * * * *', function(){
+        /* EXECUTE every 5 minutes */
+        let jobScheduler = schedule.scheduleJob('*/5 * * * *', function(){
             console.log("STARTING BALANCE:".green, startAssetCapital.gray, asset.gray, '---', startCurrencyCapital.gray, currency.gray, '--->', startTotal.yellow, currency.yellow)
             t.trade(c.authedClient, c.publicClient, assetAccountID, currencyAccountID, c.selector, startTotal);
         });
