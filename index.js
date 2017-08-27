@@ -9,12 +9,8 @@ let schedule = require('node-schedule')
 let assetAccountID, currencyAccountID, startAssetCapital, startCurrencyCapital, lastTradePrice, startTotal,
     asset = c.selector.split('-')[0]
     currency = c.selector.split('-')[1]
-    
-    MARGIN = 9
-    DROP = 3
-    RETRY = 24
-    PANIC = 100
-
+    timeSlice = 300 /* 5 mins */
+    timeRange = 6 /* 30 mins */
 
 /* EXECUTE ONLY ONCE: Get Account balances */
 a.getAccountsIDs(c.authedClient, c.selector).then( res => {
@@ -33,7 +29,12 @@ a.getAccountsIDs(c.authedClient, c.selector).then( res => {
         /* EXECUTE every 30 seconds */
         let jobScheduler = schedule.scheduleJob('*/30 * * * * *', function(){
             console.log("STARTING BALANCE:".green, startAssetCapital.gray, asset.gray, '---', startCurrencyCapital.gray, currency.gray, '--->', startTotal.yellow, currency.yellow)
-            t.trade(c.authedClient, c.publicClient, assetAccountID, currencyAccountID, c.selector, startTotal);
+            a.calculateSpeed(c.publicClient, timeSlice, timeRange).then( res => {
+              let AVG_SPEED = parseFloat(res)
+              t.trade(c.authedClient, c.publicClient, assetAccountID, currencyAccountID, c.selector, startTotal, AVG_SPEED);
+            }).catch(err => {
+              console.log("ERROR[calculateSpeed]:".red, err)
+            })
         });
       }).catch(err => {
         console.log("ERROR[getLastTradePrice]:".red, err)
