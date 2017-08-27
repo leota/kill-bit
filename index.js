@@ -9,8 +9,8 @@ let schedule = require('node-schedule')
 let assetAccountID, currencyAccountID, startAssetCapital, startCurrencyCapital, lastTradePrice, startTotal,
     asset = c.selector.split('-')[0]
     currency = c.selector.split('-')[1]
-    timeSlice = 300 /* 5 mins */
-    timeRange = 6 /* 30 mins */
+    timeSlice = 60 /* 1 min */
+    timeRange = 6 /* 6 mins */
 
 /* EXECUTE ONLY ONCE: Get Account balances */
 a.getAccountsIDs(c.authedClient, c.selector).then( res => {
