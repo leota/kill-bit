@@ -8,7 +8,9 @@ cd GDAX-Trader
 npm install
 ```
 ## Project configuration
-cp _config.js config.js <br>
+```
+cp _config.js config.js
+```
 Add your API keys to config.js
 
 ## Run
