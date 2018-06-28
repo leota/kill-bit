@@ -1,10 +1,10 @@
-# GDAX-Trader
-Tradiing bot for GDAX exchange market
+# Kill Bit
+Tradiing bot for crypto exchange markets
 
 ## Project setup
 ```
-git clone git@github.com:leota/GDAX-Trader.git
-cd GDAX-Trader
+git clone git@github.com:leota/kill-bit.git
+cd kill-bit
 npm install
 ```
 ## Project configuration
